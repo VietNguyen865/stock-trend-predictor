@@ -1,0 +1,76 @@
+Lệnh trên VM1
+
+sudo apt install python3 python3-pip -y
+Công dụng: Cài đặt Python 3 và pip (trình quản lý gói Python) trên hệ thống.
+
+python3 --version
+Công dụng: Kiểm tra phiên bản Python 3 đã cài đặt.
+
+python3 -m venv venv
+Công dụng: Tạo môi trường ảo Python có tên venv.
+
+source venv/bin/activate
+Công dụng: Kích hoạt môi trường ảo.
+
+pip install yfinance kafka-python
+Công dụng: Cài đặt các gói Python yfinance và kafka-python trong môi trường ảo.
+
+git clone https://github.com/VietNguyen865/stock-trend-predictor
+Công dụng: Tải mã nguồn của kho lưu trữ stock-trend-predictor từ GitHub.
+Chi tiết:
+git clone: Tải xuống mã nguồn của kho lưu trữ.
+Tạo một thư mục cục bộ có tên stock-trend-predictor chứa các tệp của dự án.
+
+cd stock-trend-predictor
+Công dụng: Chuyển thư mục làm việc hiện tại sang thư mục dự án vừa tải.
+
+cd data_collection
+Công dụng: Cố gắng di chuyển đến thư mục con có tên data_collection.
+
+nano producer.py
+Công dụng: Mở tệp producer.py trong trình soạn thảo văn bản nano để chỉnh sửa.
+
+python producer.py
+Công dụng: Chạy script producer.py để bắt đầu thu thập và gửi dữ liệu giá cổ phiếu.
+Chi tiết:
+Script này sử dụng yfinance để lấy dữ liệu giá cổ phiếu (ví dụ: giá đóng cửa của AAPL) và kafka-python để gửi dữ liệu đến topic Kafka (stock-prices).
+Output (Sent: {'timestamp': '2025-06-03 21:52:00', 'symbol': 'AAPL', 'close_price': 150.25}) cho thấy script gửi thành công một tin nhắn chứa thông tin giá cổ phiếu đến Kafka.
+
+Lệnh trên VM2
+
+sudo apt install openjdk-11-jdk -y
+Công dụng: Cài đặt Java Development Kit (JDK) phiên bản 11.
+
+java -version
+Công dụng: Kiểm tra phiên bản Java đã cài đặt.
+
+wget https://downloads.apache.org/kafka/3.6.1/kafka_2.13-3.6.1.tgz
+Công dụng: Tải xuống tệp nén chứa Apache Kafka phiên bản 3.6.1.
+
+tar -xzf kafka_2.13-3.6.1.tgz
+Công dụng: Giải nén tệp Kafka vừa tải xuống.
+
+mv kafka_2.13-3.6.1 /opt/kafka
+Công dụng: Di chuyển thư mục Kafka vào /opt/kafka.
+
+nano /opt/kafka/config/server.properties
+Công dụng: Chỉnh sửa tệp cấu hình Kafka server.
+Chi tiết:
+nano: Mở tệp server.properties trong trình soạn thảo văn bản.
+Các dòng được đề cập:
+#broker.id=0: ID duy nhất của Kafka broker (bỏ comment để sử dụng).
+#listeners=PLAINTEXT://192.168.56.102:9092: Địa chỉ và cổng mà Kafka broker lắng nghe (IP của VM2).
+#advertised.listeners=PLAINTEXT://192.168.56.102:9092: Địa chỉ mà các client Kafka sử dụng để kết nối.
+
+/opt/kafka/bin/zookeeper-server-start.sh -daemon /opt/kafka/config/zookeeper.properties
+Công dụng: Khởi động Zookeeper server trong chế độ nền.
+
+/opt/kafka/bin/kafka-server-start.sh -daemon /opt/kafka/config/server.properties
+Công dụng: Khởi động Kafka server trong chế độ nền.
+
+/opt/kafka/bin/kafka-topics.sh --create --topic stock-prices --bootstrap-server 192.168.56.102:9092 --partitions 1 --replication-factor 1
+Công dụng: Tạo một Kafka topic có tên stock-prices.
+
+/opt/kafka/bin/kafka-topics.sh --list --bootstrap-server 192.168.56.102:9092
+Công dụng: Liệt kê tất cả các topic hiện có trên Kafka server.
+Chi tiết: Hiển thị danh sách các topic (bao gồm stock-prices) để xác nhận topic đã được tạo.
