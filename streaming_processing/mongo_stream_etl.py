@@ -2,7 +2,7 @@ from pymongo import MongoClient
 import pandas as pd
 
 # Kết nối đến MongoDB replica set
-client = MongoClient("mongodb://192.168.1.148:27017/?replicaSet=rs0&directConnection=false&serverSelectionTimeoutMS=5000")
+client = MongoClient("mongodb://192.168.252.133:27017/?replicaSet=rs0&directConnection=false&serverSelectionTimeoutMS=5000")
 db = client['stock_db']
 src_collection = db['stock_data']
 
@@ -22,12 +22,13 @@ for change in change_stream:
 
     source = full_doc.get("source", "unknown")
     record = {
+        "symbol": full_doc.get("symbol", "UNKNOWN"),  # Thêm mã cổ phiếu
         "open": full_doc["open"],
         "high": full_doc["high"],
         "low": full_doc["low"],
         "close": full_doc["close"],
         "volume": full_doc["volume"],
-        "timestamp": full_doc.get("time")  # Nếu có trường thời gian
+        "timestamp": full_doc.get("time")
     }
 
     if source == "history":
