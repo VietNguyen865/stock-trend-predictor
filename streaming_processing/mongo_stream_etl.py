@@ -2,7 +2,7 @@ from pymongo import MongoClient
 import pandas as pd
 
 # Kết nối đến MongoDB replica set
-client = MongoClient("mongodb://192.168.252.133:27017/?replicaSet=rs0&directConnection=false&serverSelectionTimeoutMS=5000")
+client = MongoClient("mongodb://192.168.1.148:27017/?replicaSet=rs0&directConnection=false&serverSelectionTimeoutMS=5000")
 db = client['stock_db']
 src_collection = db['stock_data']
 
