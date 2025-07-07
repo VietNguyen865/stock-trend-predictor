@@ -5,7 +5,7 @@ import joblib
 import time
 
 # Kết nối MongoDB (VM4)
-client = MongoClient("mongodb://192.168.252.133:27017/?replicaSet=rs0")
+client = MongoClient("mongodb://192.168.1.148:27017/?replicaSet=rs0")
 db = client["stock_db"]
 history_collection = db["stock_history_data"]
 realtime_collection = db["stock_realtime_data"]
